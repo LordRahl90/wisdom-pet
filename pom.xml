@@ -15,7 +15,7 @@
     <description>Demo project for Spring Boot</description>
     <properties>
         <java.version>20</java.version>
-        <frontend.src.directory>src/ui</frontend.src.directory>
+        <frontend.src.directory>src/front-end</frontend.src.directory>
         <node.version>v18.15.0</node.version>
         <npm.version>9.6.7</npm.version>
     </properties>

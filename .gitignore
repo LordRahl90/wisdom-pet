@@ -3,8 +3,8 @@ target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
-src/ui/node_modules/
-src/ui/build/
+src/front-end/node_modules/
+src/front-end/build/
 
 ### STS ###
 .apt_generated
@@ -34,4 +34,4 @@ build/
 ### VS Code ###
 .vscode/
 
-/src/ui/node_modules/
+/src/front-end/node_modules/
