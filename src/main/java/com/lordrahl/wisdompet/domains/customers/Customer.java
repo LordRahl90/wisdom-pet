@@ -33,4 +33,13 @@ public class Customer {
 
     @Column(name = "ADDRESS")
     private String address;
+
+    public Customer(long id, String firstName, String lastName, String email, String phone, String address) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.phone = phone;
+        this.address = address;
+    }
 }

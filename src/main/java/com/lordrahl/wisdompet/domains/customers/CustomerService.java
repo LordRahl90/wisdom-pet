@@ -39,6 +39,7 @@ public class CustomerService {
     }
 
     public CustomerDTO createOrUpdateCustomer(CustomerDTO customerRequest) {
+        System.out.println("Got here");
         Customer customer = translateWebToDB(customerRequest);
         return translateDBToWeb(customerRepository.save(customer));
     }
