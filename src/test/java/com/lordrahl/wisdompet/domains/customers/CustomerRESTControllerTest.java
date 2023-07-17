@@ -1,9 +1,6 @@
 package com.lordrahl.wisdompet.domains.customers;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -12,6 +9,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -34,10 +32,15 @@ class CustomerRESTControllerTest {
                 new CustomerDTO(1L, "John", "Doe", "john.doe@example.com", "123123123", "johns address"),
                 new CustomerDTO(2L, "Jane", "Doe", "jane.doe@example.com", "123123123", "jane's address")
         );
-        when(customerService.getAllCustomers("")).thenReturn(customerDTOS);
+        when(customerService.getAllCustomers(any())).thenReturn(customerDTOS);
 
         mockMvc.perform(get("/api/v1/customers"))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.[0].firstName").value("John"))
+                .andExpect(jsonPath("$.[0].lastName").value("Doe"))
+                .andExpect(jsonPath("$.[0].emailAddress").value("john.doe@example.com"))
+                .andExpect(jsonPath("$.[0].phoneNumber").value("123123123"))
+                .andExpect(jsonPath("$.[1].firstName").value("Jane"));
     }
 
     @Test
@@ -46,16 +49,26 @@ class CustomerRESTControllerTest {
                 {
                     "firstName": "John",
                     "lastName": "Doe",
-                    "email": "john.doe@example.com",
-                    "phone": "123123123",
+                    "emailAddress": "john.doe@example.com",
+                    "phoneNumber": "123123123",
                     "address": "johns address"
                 }
                 """;
+
+        when(customerService.createOrUpdateCustomer(any(CustomerDTO.class))).then(invocationOnMock -> {
+            CustomerDTO customerDTO = invocationOnMock.getArgument(0);
+            customerDTO.setCustomerId(1L);
+            return customerDTO;
+        });
         mockMvc.perform(post("/api/v1/customers")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(customerRequest))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id").value(1));
+                .andExpect(jsonPath("$.customerId").value(1))
+                .andExpect(jsonPath("$.firstName").value("John"))
+                .andExpect(jsonPath("$.lastName").value("Doe"))
+                .andExpect(jsonPath("$.emailAddress").value("john.doe@example.com"))
+                .andExpect(jsonPath("$.phoneNumber").value("123123123"));
     }
 
 

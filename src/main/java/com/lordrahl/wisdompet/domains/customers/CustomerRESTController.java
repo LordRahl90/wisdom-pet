@@ -22,7 +22,6 @@ public class CustomerRESTController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CustomerDTO createNewCustomer(@RequestBody CustomerDTO customerDTO) {
-        System.out.println("hit controller");
         return customerService.createOrUpdateCustomer(customerDTO);
     }
 
